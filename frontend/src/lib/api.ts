@@ -10,14 +10,16 @@ export interface RecommendationRequest {
   location: string;
   budget: string;
   min_rating: number;
-  preferred_cuisines: string[];
+  cuisines: string[];
   additional_preferences: string;
 }
 
 export interface RecommendationResult {
-  restaurant: any; // We can type this strictly based on Zomato dataset if needed
-  match_score: number;
-  match_reason: string;
+  name: string;
+  rating: number;
+  cost: string;
+  cuisines: string;
+  explanation: string;
 }
 
 export async function fetchFilters(): Promise<FilterOptions> {
@@ -38,7 +40,14 @@ export async function fetchRecommendations(req: RecommendationRequest): Promise<
   });
   
   if (!res.ok) {
-    throw new Error('Failed to fetch recommendations');
+    let errorMessage = 'Failed to fetch recommendations';
+    try {
+      const errorData = await res.json();
+      if (errorData.detail) errorMessage = errorData.detail;
+    } catch (e) {
+      // ignore JSON parse error
+    }
+    throw new Error(errorMessage);
   }
   
   const data = await res.json();

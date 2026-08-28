@@ -9,7 +9,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const [location, setLocation] = useState("");
-  const [budget, setBudget] = useState("any");
+  const [budget, setBudget] = useState("Any");
   const [minRating, setMinRating] = useState(4.0);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [preferences, setPreferences] = useState("");
@@ -43,7 +43,7 @@ export default function Home() {
         location,
         budget,
         min_rating: minRating,
-        preferred_cuisines: selectedCuisines,
+        cuisines: selectedCuisines,
         additional_preferences: preferences,
       });
       setRecommendations(results);
@@ -106,10 +106,10 @@ export default function Home() {
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg text-on-surface pl-10 py-3 appearance-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all cursor-pointer">
-                <option className="bg-surface text-on-surface" value="any">Any Budget</option>
-                <option className="bg-surface text-on-surface" value="low">$$$ (Under ₹500)</option>
-                <option className="bg-surface text-on-surface" value="medium">$$$ (₹500 - ₹1500)</option>
-                <option className="bg-surface text-on-surface" value="high">$$$ (₹1500+)</option>
+                <option className="bg-surface text-on-surface" value="Any">Any Budget</option>
+                <option className="bg-surface text-on-surface" value="Low">$$$ (Under ₹500)</option>
+                <option className="bg-surface text-on-surface" value="Medium">$$$ (₹500 - ₹1500)</option>
+                <option className="bg-surface text-on-surface" value="High">$$$ (₹1500+)</option>
               </select>
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
             </div>
@@ -198,36 +198,28 @@ export default function Home() {
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-headline-md text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300">
-                          {recommendations[0].restaurant.name}
+                          {recommendations[0].name}
                         </h4>
                         <div className="flex items-center gap-1 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-lg text-primary font-bold border border-white/10 shadow-[0_0_10px_rgba(226,55,68,0.1)]">
                           <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span> 
-                          {recommendations[0].restaurant.rate !== 'NEW' && recommendations[0].restaurant.rate !== '-' 
-                            ? recommendations[0].restaurant.rate.split('/')[0].trim() 
-                            : 'N/A'}
+                          {recommendations[0].rating || 'N/A'}
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2 mb-4 font-label-caps text-label-caps">
                         <span className="text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-                          ₹{recommendations[0].restaurant.approx_cost_for_two_people} for two
+                          {recommendations[0].cost || 'Unknown'} Cost
                         </span>
                         <span className="text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-                          {recommendations[0].restaurant.cuisines}
-                        </span>
-                        <span className="text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-                          {recommendations[0].restaurant.listed_in_type}
+                          {recommendations[0].cuisines}
                         </span>
                       </div>
-                      <p className="text-on-surface-variant text-sm mb-4">
-                        {recommendations[0].restaurant.address}
-                      </p>
                     </div>
                     <div className="mt-8 bg-black/20 backdrop-blur-md border-l-2 border-primary p-4 rounded-r-lg shadow-[inset_4px_0_0_rgba(226,55,68,1)]">
                       <h5 className="font-interactive-label text-sm text-primary mb-1 flex items-center gap-1">
                         <span className="material-symbols-outlined text-[16px]">psychology</span> AI Match Reason
                       </h5>
                       <p className="text-sm text-on-surface-variant leading-relaxed">
-                        {recommendations[0].match_reason}
+                        {recommendations[0].explanation}
                       </p>
                     </div>
                   </div>
@@ -243,12 +235,12 @@ export default function Home() {
                   {recommendations.map((rec, i) => (
                     <div key={i} className="flex justify-between items-center pb-3 border-b border-white/10 last:border-0">
                       <div className="pr-2">
-                        <p className="font-bold text-on-surface text-sm line-clamp-1">{rec.restaurant.name}</p>
-                        <p className="text-xs text-on-surface-variant line-clamp-1">{rec.restaurant.cuisines}</p>
+                        <p className="font-bold text-on-surface text-sm line-clamp-1">{rec.name}</p>
+                        <p className="text-xs text-on-surface-variant line-clamp-1">{rec.cuisines}</p>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className="text-primary text-sm font-bold">{rec.match_score}% Match</p>
-                        <p className="text-xs text-on-surface-variant">₹{rec.restaurant.approx_cost_for_two_people}</p>
+                        <p className="text-primary text-sm font-bold">★ {rec.rating || 'N/A'}</p>
+                        <p className="text-xs text-on-surface-variant">{rec.cost || 'Unknown'} Cost</p>
                       </div>
                     </div>
                   ))}
@@ -265,22 +257,19 @@ export default function Home() {
                   <div className="p-6 h-full flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-headline-md text-xl font-bold text-white group-hover:text-primary transition-colors">{rec.restaurant.name}</h4>
+                        <h4 className="font-headline-md text-xl font-bold text-white group-hover:text-primary transition-colors">{rec.name}</h4>
                         <div className="flex items-center gap-1 text-primary font-bold">
                           <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span> 
-                          {rec.restaurant.rate !== 'NEW' && rec.restaurant.rate !== '-' 
-                            ? rec.restaurant.rate.split('/')[0].trim() 
-                            : 'N/A'}
+                          {rec.rating || 'N/A'}
                         </div>
                       </div>
-                      <p className="text-xs text-on-surface-variant mb-4">{rec.restaurant.cuisines}</p>
+                      <p className="text-xs text-on-surface-variant mb-4">{rec.cuisines}</p>
                       <p className="text-sm text-on-surface-variant line-clamp-3 mb-4 border-l-2 border-primary/50 pl-3">
-                        {rec.match_reason}
+                        {rec.explanation}
                       </p>
                     </div>
                     <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/10">
-                      <span className="font-label-caps text-label-caps text-on-surface-variant">₹{rec.restaurant.approx_cost_for_two_people} / two</span>
-                      <span className="text-primary text-sm font-bold">{rec.match_score}% Match</span>
+                      <span className="font-label-caps text-label-caps text-on-surface-variant">{rec.cost || 'Unknown'} Cost</span>
                     </div>
                   </div>
                 </div>

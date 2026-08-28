@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 # pyrefly: ignore [missing-import]
-from datasets import load_dataset
 import json
 import os
 from dotenv import load_dotenv
@@ -23,15 +22,10 @@ def categorize_cost(cost):
 @st.cache_data
 def load_data():
     try:
-        # 1. Fetch data from Hugging Face
-        dataset = load_dataset('ManikaSaini/zomato-restaurant-recommendation', split='train')
-        
-        # Drop heavy unused columns before converting to pandas to save memory
-        cols_to_keep = ['name', 'location', 'cuisines', 'rate', 'approx_cost(for two people)']
-        cols_to_remove = [col for col in dataset.column_names if col not in cols_to_keep]
-        dataset = dataset.remove_columns(cols_to_remove)
-        
-        df = dataset.to_pandas() # type: ignore
+        import os
+        # 1. Load data from local CSV to prevent OOM on Railway/Streamlit Cloud
+        file_path = os.path.join(os.path.dirname(__file__), 'backend', 'app', 'zomato_cleaned.csv')
+        df = pd.read_csv(file_path)
         
         # 2. Data Cleaning
         # Lowercase columns for consistency

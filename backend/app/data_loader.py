@@ -54,6 +54,12 @@ def load_data() -> pd.DataFrame:
         dataset = load_dataset(
             "ManikaSaini/zomato-restaurant-recommendation", split="train"
         )
+        
+        # Drop heavy unused columns before converting to pandas to save memory
+        cols_to_keep = ['name', 'location', 'cuisines', 'rate', 'approx_cost(for two people)']
+        cols_to_remove = [col for col in dataset.column_names if col not in cols_to_keep]
+        dataset = dataset.remove_columns(cols_to_remove)
+        
         df = dataset.to_pandas()  # type: ignore
 
         # 2. Data Cleaning

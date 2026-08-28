@@ -1,6 +1,6 @@
 fastapi==0.115.*
 uvicorn[standard]==0.34.*
 pandas
-datasets
+pyarrow
 groq
 python-dotenv

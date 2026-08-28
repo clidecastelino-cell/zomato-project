@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI-Powered Restaurant Recommender</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#b9c7e0",
+                      "primary-fixed-dim": "#ffb3b1",
+                      "on-primary-fixed-variant": "#92001c",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "on-surface-variant": "#e4bebc",
+                      "on-error": "#690005",
+                      "on-background": "#dae2fd",
+                      "secondary-container": "#464a4b",
+                      "on-primary-fixed": "#410007",
+                      "surface-tint": "#ffb3b1",
+                      "on-secondary-container": "#b6b9bb",
+                      "secondary-fixed": "#e0e3e5",
+                      "primary-fixed": "#ffdad8",
+                      "on-tertiary-fixed": "#0d1c2f",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-container": "#5b000e",
+                      "on-secondary": "#2d3133",
+                      "surface-container-low": "#131b2e",
+                      "surface-bright": "#31394d",
+                      "surface-container-high": "#222a3d",
+                      "inverse-surface": "#dae2fd",
+                      "on-secondary-fixed": "#191c1e",
+                      "secondary": "#c4c7c9",
+                      "primary": "#ffb3b1",
+                      "tertiary-container": "#8392a9",
+                      "inverse-primary": "#bb162c",
+                      "on-tertiary-container": "#1c2a3d",
+                      "surface-dim": "#0b1326",
+                      "tertiary-fixed": "#d5e3fd",
+                      "on-tertiary-fixed-variant": "#3a485c",
+                      "on-secondary-fixed-variant": "#444749",
+                      "surface": "#0b1326",
+                      "surface-container": "#171f33",
+                      "surface-container-lowest": "#060e20",
+                      "error": "#ffb4ab",
+                      "outline": "#ab8987",
+                      "tertiary-fixed-dim": "#b9c7e0",
+                      "surface-variant": "#2d3449",
+                      "on-surface": "#dae2fd",
+                      "on-tertiary": "#233144",
+                      "on-primary": "#680011",
+                      "background": "#0b1326",
+                      "surface-container-highest": "#2d3449",
+                      "primary-container": "#ff535a",
+                      "inverse-on-surface": "#283044",
+                      "outline-variant": "#5b403f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "0.5rem",
+                      "stack-lg": "2rem",
+                      "gutter": "1.5rem",
+                      "container-padding-desktop": "2.5rem",
+                      "container-padding-mobile": "1rem",
+                      "unit": "4px",
+                      "stack-md": "1rem"
+              },
+              "fontFamily": {
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "interactive-label": [
+                              "Outfit"
+                      ],
+                      "display-lg-mobile": [
+                              "Outfit"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Outfit"
+                      ],
+                      "headline-md": [
+                              "Outfit"
+                      ]
+              },
+              "fontSize": {
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "interactive-label": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-panel-active {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(226, 55, 68, 0.2);
+            border-color: #E23744;
+        }
+
+        .crimson-glow {
+            box-shadow: 0 0 15px rgba(226, 55, 68, 0.5);
+        }
+        
+        .live-border {
+            position: relative;
+        }
+        .live-border::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #E23744, transparent, #E23744);
+            z-index: -1;
+            border-radius: inherit;
+            animation: rotate-gradient 4s linear infinite;
+        }
+        
+        @keyframes rotate-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-primary {
+            background-color: #E23744;
+            color: white;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 0 15px rgba(226, 55, 68, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.25), 0 0 25px rgba(226, 55, 68, 0.7);
+            transform: translateY(-1px);
+        }
+        
+        /* Custom Scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface'); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-variant'); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline'); 
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-body-md text-body-md selection:bg-primary-container selection:text-white">
+<!-- Top Navigation (Mobile) / Side Navigation (Desktop via Shared Components Logic) -->
+<nav class="hidden md:flex flex-col justify-between py-stack-lg bg-[#ffffff0d] backdrop-blur-xl fixed left-0 top-0 h-full w-[280px] border-r border-[#ffffff1a] shadow-[0_0_20px_rgba(226,55,68,0.1)] z-40 transition-transform duration-300">
+<div class="px-container-padding-desktop">
+<div class="flex items-center gap-3 mb-stack-lg">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline/20">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary text-xl leading-tight">Lumiere AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Premium Concierge</p>
+</div>
+</div>
+<ul class="space-y-unit">
+<li>
+<a class="flex items-center gap-3 text-on-surface font-bold border-l-4 border-primary pl-4 py-3 bg-[#ffffff0a] rounded-r-lg font-interactive-label text-interactive-label" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">recommend</span>
+                        Recommendations
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant pl-4 py-3 hover:text-on-surface hover:bg-[#ffffff14] transition-colors duration-300 rounded-r-lg font-interactive-label text-interactive-label" href="#">
+<span class="material-symbols-outlined">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+<div class="mt-stack-lg pt-stack-sm border-t border-[#ffffff1a]">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Groq API Key</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">lock</span>
+<input class="w-full bg-white/5 border border-white/10 rounded focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] text-on-surface pl-9 py-2 text-sm transition-all shadow-[0_0_10px_rgba(226,55,68,0)] focus:shadow-[0_0_10px_rgba(226,55,68,0.3)]" placeholder="sk-..." type="password"/>
+</div>
+</div>
+</div>
+<div class="px-container-padding-desktop">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">Powered By</p>
+<ul class="space-y-2 opacity-70">
+<li class="flex items-center gap-2 text-sm text-on-surface">
+<span class="material-symbols-outlined text-[16px]">database</span> Data: Zomato
+                </li>
+<li class="flex items-center gap-2 text-sm text-on-surface">
+<span class="material-symbols-outlined text-[16px]">neurology</span> HuggingFace
+                </li>
+</ul>
+</div>
+</nav>
+<!-- Mobile Top App Bar -->
+<header class="md:hidden docked full-width top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 shadow-sm flex justify-between items-center px-container-padding-mobile py-4 fixed w-full">
+<h1 class="font-display-lg-mobile text-display-lg-mobile tracking-tight text-primary text-2xl">Lumiere AI</h1>
+<button class="text-on-surface-variant p-2"><span class="material-symbols-outlined">menu</span></button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-[280px] mt-[72px] md:mt-0 p-container-padding-mobile md:p-container-padding-desktop overflow-y-auto relative scroll-smooth">
+<!-- Ambient Background Glow -->
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+<div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-tertiary-container/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+<div class="max-w-[1000px] mx-auto space-y-stack-lg">
+<!-- Header Section -->
+<section class="space-y-4">
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface flex items-center gap-3">
+<span class="text-4xl">🍽️</span> AI-Powered Restaurant Recommender
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Discover your next favorite meal based on your exact preferences, powered by AI. Let our premium concierge curate the perfect dining experience for you tonight.
+                </p>
+</section>
+<!-- Preferences Form (Elevated Glass Card) -->
+<section class="glass-panel rounded-xl p-6 md:p-8 relative overflow-hidden group">
+<!-- Specular Highlight Top Edge -->
+<div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">tune</span> Perfect Your Search
+                 </h3>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Location -->
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Location</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">location_on</span>
+<select class="w-full bg-white/5 border border-white/10 rounded-lg text-on-surface pl-10 py-3 appearance-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all cursor-pointer">
+<option class="bg-surface text-on-surface" value="new-york">New York City, NY</option>
+<option class="bg-surface text-on-surface" value="los-angeles">Los Angeles, CA</option>
+<option class="bg-surface text-on-surface" value="chicago">Chicago, IL</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Budget -->
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Budget</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">payments</span>
+<select class="w-full bg-white/5 border border-white/10 rounded-lg text-on-surface pl-10 py-3 appearance-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all cursor-pointer">
+<option class="bg-surface text-on-surface" value="any">Any Budget</option>
+<option class="bg-surface text-on-surface" value="low">$ (Under $20)</option>
+<option class="bg-surface text-on-surface" value="medium">$$ ($20 - $50)</option>
+<option class="bg-surface text-on-surface" value="high">$$$ ($50+)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Minimum Rating Slider -->
+<div class="space-y-2 md:col-span-2">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Minimum Rating</label>
+<span class="font-interactive-label text-interactive-label text-primary font-bold">4.2+ Stars</span>
+</div>
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-[#E23744]" max="5" min="0" step="0.1" type="range" value="4.2"/>
+</div>
+<!-- Preferred Cuisines (Pills) -->
+<div class="space-y-3 md:col-span-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Preferred Cuisines</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full border border-primary text-primary bg-primary/10 font-interactive-label text-sm transition-all hover:bg-primary/20" type="button">Italian</button>
+<button class="px-4 py-1.5 rounded-full border border-white/10 text-on-surface-variant bg-white/5 font-interactive-label text-sm transition-all hover:border-white/30 hover:text-on-surface" type="button">Japanese</button>
+<button class="px-4 py-1.5 rounded-full border border-white/10 text-on-surface-variant bg-white/5 font-interactive-label text-sm transition-all hover:border-white/30 hover:text-on-surface" type="button">Mexican</button>
+<button class="px-4 py-1.5 rounded-full border border-white/10 text-on-surface-variant bg-white/5 font-interactive-label text-sm transition-all hover:border-white/30 hover:text-on-surface" type="button">Steakhouse</button>
+<button class="px-4 py-1.5 rounded-full border border-primary text-primary bg-primary/10 font-interactive-label text-sm transition-all hover:bg-primary/20" type="button">Fusion</button>
+<button class="px-4 py-1.5 rounded-full border border-white/10 text-on-surface-variant bg-white/5 font-interactive-label text-sm transition-all hover:border-white/30 hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[16px] align-middle mr-1">add</span>More
+                             </button>
+</div>
+</div>
+<!-- Additional Preferences -->
+<div class="space-y-2 md:col-span-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Additional Preferences (Vibe, Dietary, etc.)</label>
+<textarea class="w-full bg-white/5 border border-white/10 rounded-lg text-on-surface p-3 focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all resize-none" placeholder="e.g., Romantic ambiance, rooftop seating, gluten-free options..." rows="2"></textarea>
+</div>
+<!-- CTA -->
+<div class="md:col-span-2 pt-4">
+<button class="w-full btn-primary font-interactive-label text-interactive-label py-4 rounded-lg flex items-center justify-center gap-2 group relative overflow-hidden" type="button">
+<span class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined animate-pulse">auto_awesome</span>
+                                Get Recommendations
+                             </span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+</button>
+</div>
+</form>
+</section>
+<!-- Results Section -->
+<section class="space-y-6 pt-stack-md">
+<div class="flex justify-between items-end border-b border-white/10 pb-4">
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface">Curated Picks</h3>
+<span class="font-label-caps text-label-caps text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20">3 Matches Found</span>
+</div>
+<!-- Bento Grid Layout for Results -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Top Candidate 1 (Featured, spans 12 cols or 8 on large screens) -->
+<div class="lg:col-span-8 live-border rounded-xl p-[1px] group">
+<div class="glass-panel h-full rounded-xl overflow-hidden flex flex-col relative bg-surface-container/40 backdrop-blur-xl group-hover:bg-surface-container/60 transition-all duration-500">
+<div class="p-6 md:p-8 flex flex-col justify-between flex-1 relative z-10">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-md text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300">The Crimson Kitchen</h4>
+<div class="flex items-center gap-1 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-lg text-primary font-bold border border-white/10 shadow-[0_0_10px_rgba(226,55,68,0.1)]">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.8
+                                        </div>
+</div>
+<div class="flex gap-2 mb-4 font-label-caps text-label-caps">
+<span class="text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-md border border-white/5">$$$</span>
+<span class="text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-md border border-white/5">Italian, Fusion</span>
+</div>
+</div>
+<div class="mt-8 bg-black/20 backdrop-blur-md border-l-2 border-primary p-4 rounded-r-lg shadow-[inset_4px_0_0_rgba(226,55,68,1)]">
+<h5 class="font-interactive-label text-sm text-primary mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">psychology</span> AI Match Reason
+                                    </h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                        Based on your preference for romantic ambiance and high-rated Italian cuisine, this rooftop venue offers the perfect blend. The fusion menu directly addresses your desire for unique flavor profiles.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Stats / Top Candidates Table Summary -->
+<div class="lg:col-span-4 glass-panel rounded-xl p-6 flex flex-col">
+<h4 class="font-interactive-label text-lg font-bold text-on-surface mb-4">Quick Compare</h4>
+<div class="flex-1 space-y-4">
+<!-- Table Row 1 -->
+<div class="flex justify-between items-center pb-3 border-b border-white/10">
+<div>
+<p class="font-bold text-on-surface text-sm">Crimson Kitchen</p>
+<p class="text-xs text-on-surface-variant">0.8 mi • Italian</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-sm font-bold">98% Match</p>
+<p class="text-xs text-on-surface-variant">$$$</p>
+</div>
+</div>
+<!-- Table Row 2 -->
+<div class="flex justify-between items-center pb-3 border-b border-white/10">
+<div>
+<p class="font-bold text-on-surface text-sm">Neon Sushi Hub</p>
+<p class="text-xs text-on-surface-variant">1.2 mi • Japanese</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-sm font-bold">92% Match</p>
+<p class="text-xs text-on-surface-variant">$$</p>
+</div>
+</div>
+<!-- Table Row 3 -->
+<div class="flex justify-between items-center">
+<div>
+<p class="font-bold text-on-surface text-sm">Velvet Steakhouse</p>
+<p class="text-xs text-on-surface-variant">2.5 mi • Steak</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-sm font-bold">85% Match</p>
+<p class="text-xs text-on-surface-variant">$$$$</p>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full py-2 border border-white/10 text-on-surface rounded-lg hover:border-primary hover:text-primary transition-colors text-sm font-interactive-label">View Full Dataset</button>
+</div>
+<!-- Secondary Candidate 2 -->
+<div class="lg:col-span-6 glass-panel rounded-xl overflow-hidden group hover:glass-panel-active transition-all duration-300 bg-surface-container/20 cursor-pointer">
+<div class="p-6 h-full flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-lg text-white group-hover:text-primary transition-colors">Neon Sushi Hub</h4>
+<span class="bg-white/5 backdrop-blur px-2 py-1 rounded text-xs text-primary font-bold border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.5
+</span>
+</div>
+<div class="flex gap-2 mb-4 font-label-caps text-label-caps">
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">$$</span>
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">Japanese</span>
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">Downtown</span>
+</div>
+</div>
+<div class="bg-white/5 p-4 rounded-lg border border-white/5 text-sm text-on-surface-variant leading-relaxed mt-4 group-hover:bg-white/10 transition-colors">
+<span class="text-primary font-semibold flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[16px]">psychology</span> Match Reason:
+</span>
+                                Fits your budget and cuisine preference perfectly while maintaining a top-tier rating in your selected location.
+                            </div>
+</div>
+</div>
+<!-- Secondary Candidate 3 -->
+<div class="lg:col-span-6 glass-panel rounded-xl overflow-hidden group hover:glass-panel-active transition-all duration-300 bg-surface-container/20 cursor-pointer">
+<div class="p-6 h-full flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-lg text-white group-hover:text-primary transition-colors">Velvet Steakhouse</h4>
+<span class="bg-white/5 backdrop-blur px-2 py-1 rounded text-xs text-primary font-bold border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.7
+</span>
+</div>
+<div class="flex gap-2 mb-4 font-label-caps text-label-caps">
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">$$$$</span>
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">Steakhouse</span>
+<span class="text-xs text-on-surface-variant bg-white/5 px-2 py-1 rounded border border-white/5">Westside</span>
+</div>
+</div>
+<div class="bg-white/5 p-4 rounded-lg border border-white/5 text-sm text-on-surface-variant leading-relaxed mt-4 group-hover:bg-white/10 transition-colors">
+<span class="text-primary font-semibold flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[16px]">psychology</span> Match Reason:
+</span>
+                                While slightly above the specified budget, its exceptional ratings and romantic atmosphere make it a strong wildcard recommendation.
+                            </div>
+</div>
+</div>
+</div>
+</section>
+<div class="h-12"></div> <!-- Bottom padding -->
+</div>
+</main>
+</body></html>

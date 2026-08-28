@@ -50,9 +50,9 @@ def load_data() -> pd.DataFrame:
 
     try:
         import os
-        # 1. Load pre-downloaded dataset from local Parquet file to save memory
-        file_path = os.path.join(os.path.dirname(__file__), 'zomato_cleaned.parquet')
-        df = pd.read_parquet(file_path)
+        # 1. Load pre-downloaded dataset from local CSV file to save memory
+        file_path = os.path.join(os.path.dirname(__file__), 'zomato_cleaned.csv')
+        df = pd.read_csv(file_path)
 
         # 2. Data Cleaning
         # Lowercase columns for consistency
